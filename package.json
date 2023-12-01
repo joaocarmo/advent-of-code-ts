@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/joaocarmo/advent-of-code-ts/issues"
   },
-  "homepage": "https://github.com/joaocarmo/advent-of-code-ts#readme"
+  "homepage": "https://github.com/joaocarmo/advent-of-code-ts#readme",
+  "devDependencies": {
+    "@types/node": "^20.10.1",
+    "typescript": "^5.3.2"
+  }
 }
