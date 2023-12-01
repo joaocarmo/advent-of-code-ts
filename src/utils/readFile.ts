@@ -29,3 +29,10 @@ export const readFileLine = (
 
   rl.on("close", onClose)
 }
+
+/**
+ * Ignore black lines (lines that are empty or only contain spaces).
+ */
+export const ignoreBlackLine =
+  (fn: (line: string) => void) => (line: string) =>
+    line.trim() !== "" ? fn(line) : undefined
