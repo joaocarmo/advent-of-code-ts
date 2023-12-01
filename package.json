@@ -5,8 +5,10 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "rimraf ./build && tsc",
+    "lint": "",
+    "start:dev": "npx nodemon",
     "start": "npm run build && node build/index.js",
-    "start:dev": "npx nodemon"
+    "type-check": ""
   },
   "repository": {
     "type": "git",
