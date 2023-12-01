@@ -1,0 +1,19 @@
+{
+  "name": "advent-of-code-ts",
+  "version": "1.0.0",
+  "description": "Advent of Code is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels.",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaocarmo/advent-of-code-ts.git"
+  },
+  "author": "João Carmo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joaocarmo/advent-of-code-ts/issues"
+  },
+  "homepage": "https://github.com/joaocarmo/advent-of-code-ts#readme"
+}
