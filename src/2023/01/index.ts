@@ -1,6 +1,6 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlackLine, readFileLine } from "@/utils/readFile"
-import { getCalibrationFromLine } from "./getCalibrationFromLineV1"
+import { getCalibrationFromLine } from "./getCalibrationFromLineV2"
 
 interface State {
   calibrationValues: number[]
