@@ -1,3 +1,3 @@
-import challenge from "@/2023/01"
+import challenge from "@/2023/02"
 
 challenge()
