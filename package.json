@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "pretty": "prettier --write .",
     "start:dev": "nodemon",
-    "start": "npm run build && node build/index.js",
+    "start": "npm run build && node -r tsconfig-paths/register build/index.js",
     "type-check": "tsc --noEmit",
     "prepare": "husky install"
   },
@@ -24,6 +24,7 @@
   "homepage": "https://github.com/joaocarmo/advent-of-code-ts#readme",
   "devDependencies": {
     "@types/node": "^20.10.1",
+    "@types/yargs": "^17.0.32",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "eslint": "^8.54.0",
@@ -34,10 +35,14 @@
     "prettier": "^3.1.0",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.3.2"
   },
   "lint-staged": {
     "*.ts": "eslint --cache --fix",
     "*.{ts,json,md}": "prettier --write"
+  },
+  "dependencies": {
+    "yargs": "^17.7.2"
   }
 }

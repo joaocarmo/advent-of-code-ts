@@ -1,1 +1,3 @@
-// This file was purposely left blank.
+import challenge from "@/2023/01"
+
+challenge()
