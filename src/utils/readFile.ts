@@ -10,7 +10,7 @@ export const readFileLine = (
     onLine,
     onClose,
   }: {
-    onLine: (line: string) => void
+    onLine: (line: string, lineIndex: number) => void
     onClose?: () => void
   },
 ) => {
@@ -21,7 +21,12 @@ export const readFileLine = (
     crlfDelay: Infinity,
   })
 
-  rl.on("line", onLine)
+  let lineIndex = 0
+
+  rl.on("line", (line) => {
+    onLine(line, lineIndex)
+    lineIndex++
+  })
 
   if (!onClose) {
     return
@@ -34,5 +39,6 @@ export const readFileLine = (
  * Ignore black lines (lines that are empty or only contain spaces).
  */
 export const ignoreBlackLine =
-  (fn: (line: string) => void) => (line: string) =>
-    line.trim() !== "" ? fn(line) : undefined
+  (fn: (line: string, lineIndex: number) => void) =>
+  (line: string, lineIndex: number) =>
+    line.trim() !== "" ? fn(line, lineIndex) : undefined

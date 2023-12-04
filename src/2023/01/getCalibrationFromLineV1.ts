@@ -1,4 +1,4 @@
-import { isDigit } from "./isDigit"
+import { isDigit } from "../../utils/isDigit"
 
 export const getCalibrationFromLine = (line: string): number => {
   const N = line.length
