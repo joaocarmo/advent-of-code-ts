@@ -45,11 +45,9 @@ const solution = (state: State): State => {
         new Point(x + 1, y + 1),
       ]
 
-      isAdjacentToSymbol =
-        isAdjacentToSymbol ||
-        ajacentPoints
-          .filter((point) => state.grid.get(point))
-          .some((point) => state.grid.isSymbol(point))
+      isAdjacentToSymbol ||= ajacentPoints
+        .filter((point) => state.grid.get(point))
+        .some((point) => state.grid.isSymbol(point))
 
       state.grid.set(point, {
         isPart: isAdjacentToSymbol,
