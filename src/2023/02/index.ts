@@ -1,10 +1,11 @@
 import { extractNumber } from "@/utils/extractNumber"
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlackLine, readFileLine } from "@/utils/readFile"
+import { solution } from "./solutionV1"
 
 type GameId = number | string
 
-interface Game {
+export interface Game {
   red: number
   green: number
   blue: number
@@ -15,14 +16,8 @@ interface GameResult {
   games: Game[]
 }
 
-interface State {
+export interface State {
   [key: GameId]: GameResult
-}
-
-const bag: Game = {
-  red: 12,
-  green: 13,
-  blue: 14,
 }
 
 const getColor = (color: string): keyof Game => {
@@ -36,34 +31,6 @@ const getColor = (color: string): keyof Game => {
     default:
       throw new Error(`Unknown color: ${color}`)
   }
-}
-
-const isGamePossible = (game: Game): boolean => {
-  if (game.red > bag.red) {
-    return false
-  }
-
-  if (game.green > bag.green) {
-    return false
-  }
-
-  if (game.blue > bag.blue) {
-    return false
-  }
-
-  return true
-}
-
-const solution = (state: State): State => {
-  const gameIds = Object.keys(state)
-
-  for (const gameId of gameIds) {
-    state[gameId].isPossible = !state[gameId].games.some(
-      (game) => !isGamePossible(game),
-    )
-  }
-
-  return state
 }
 
 const parseGame = (gameResult: string): Game => {
