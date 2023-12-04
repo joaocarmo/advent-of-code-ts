@@ -1,3 +1,5 @@
+import fs from "fs"
+import { resolve } from "path"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 
@@ -8,13 +10,19 @@ export const parseArgs = async () => {
   const argv = await yargs(hideBin(process.argv)).argv
 
   // Gets the first positional argument
-  const [inputFile] = argv._
+  const [inputFileFromArgs] = argv._
 
-  if (!inputFile) {
+  if (!inputFileFromArgs) {
     throw new Error("Input file is required")
   }
 
+  const inputFile = resolve(String(inputFileFromArgs))
+
+  if (!fs.existsSync(inputFile)) {
+    throw new Error(`Input file ${inputFile} does not exist`)
+  }
+
   return {
-    inputFile: String(inputFile),
+    inputFile,
   }
 }
