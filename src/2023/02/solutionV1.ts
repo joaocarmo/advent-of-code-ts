@@ -22,7 +22,7 @@ const isGamePossible = (game: Game): boolean => {
   return true
 }
 
-export const solution = (state: State): State => {
+const solution = (state: State): State => {
   const gameIds = Object.keys(state)
 
   for (const gameId of gameIds) {
@@ -32,4 +32,15 @@ export const solution = (state: State): State => {
   }
 
   return state
+}
+
+export const findSolution = (state: State) => () => {
+  const result = solution(state)
+  const sumPossibleGameIds = Object.keys(result).reduce(
+    (acc, gameId) =>
+      result[gameId].isPossible ? acc + parseInt(gameId, 10) : acc,
+    0,
+  )
+
+  console.log({ sumPossibleGameIds })
 }

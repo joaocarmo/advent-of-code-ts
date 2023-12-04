@@ -1,7 +1,7 @@
 import { extractNumber } from "@/utils/extractNumber"
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlackLine, readFileLine } from "@/utils/readFile"
-import { solution } from "./solutionV1"
+import { findSolution } from "./solutionV2"
 
 type GameId = number | string
 
@@ -12,8 +12,10 @@ export interface Game {
 }
 
 interface GameResult {
-  isPossible: boolean
   games: Game[]
+  isPossible: boolean
+  minPossibleSet: Game
+  power: number
 }
 
 export interface State {
@@ -66,20 +68,15 @@ const parseLine = (state: State) => (line: string) => {
   }
 
   state[gameId] = {
-    isPossible: false,
     games: gameIterations.split(";").map(parseGame),
+    isPossible: false,
+    minPossibleSet: {
+      red: 0,
+      green: 0,
+      blue: 0,
+    },
+    power: 0,
   }
-}
-
-const findSolution = (state: State) => () => {
-  const result = solution(state)
-  const sumPossibleGameIds = Object.keys(result).reduce(
-    (acc, gameId) =>
-      result[gameId].isPossible ? acc + parseInt(gameId, 10) : acc,
-    0,
-  )
-
-  console.log({ sumPossibleGameIds })
 }
 
 const main = async () => {
