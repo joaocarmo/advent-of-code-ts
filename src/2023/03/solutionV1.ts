@@ -1,5 +1,5 @@
-import type { State } from "."
 import { Point } from "./Point"
+import type { State } from "."
 
 const solution = (state: State): State => {
   for (let y = state.grid.yMin; y <= state.grid.yMax; y++) {
@@ -11,7 +11,10 @@ const solution = (state: State): State => {
 
       if (!state.grid.isNumber(point)) {
         if (newPartNumber.length > 0 && isAdjacentToSymbol) {
-          state.partNumbers.push(parseInt(newPartNumber, 10))
+          state.partNumbers.push({
+            closestGear: null,
+            number: parseInt(newPartNumber, 10),
+          })
         }
 
         newPartNumber = ""
@@ -38,6 +41,7 @@ const solution = (state: State): State => {
         .some((point) => state.grid.isSymbol(point))
 
       state.grid.set(point, {
+        closestGear: null,
         isPart: isAdjacentToSymbol,
         value: state.grid.get(point)!.value,
       })
@@ -50,7 +54,7 @@ const solution = (state: State): State => {
 export const findSolution = (state: State) => () => {
   const result = solution(state)
   const sumOfAllPartNumbers = result.partNumbers.reduce(
-    (acc, partNumber) => acc + partNumber,
+    (acc, part) => acc + part.number,
     0,
   )
 

@@ -2,21 +2,28 @@ import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlackLine, readFileLine } from "@/utils/readFile"
 import { Grid } from "./Grid"
 import { Point } from "./Point"
-import { findSolution } from "./solutionV1"
+import { findSolution } from "./solutionV2"
 
 interface PointWithInfo {
+  closestGear: Point | null
   isPart: boolean
   value: string
 }
 
+interface PartNumber {
+  closestGear: Point | null
+  number: number
+}
+
 export interface State {
   grid: Grid<string, PointWithInfo>
-  partNumbers: number[]
+  partNumbers: PartNumber[]
 }
 
 const parseLine = (state: State) => (line: string, lineIndex: number) => {
   line.split("").forEach((char, charIndex) => {
     state.grid.set(new Point(charIndex, lineIndex), {
+      closestGear: null,
       isPart: false,
       value: char,
     })

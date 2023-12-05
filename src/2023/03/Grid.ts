@@ -45,6 +45,10 @@ export class Grid<T, K extends GridValue<T>> {
     )
   }
 
+  isGear(point: Point): boolean {
+    return this.isSymbol(point) && this.get(point)?.value === "*"
+  }
+
   toString(): string {
     let result = ""
 
