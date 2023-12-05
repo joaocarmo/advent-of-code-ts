@@ -54,14 +54,25 @@ const getCategoryNumberFromMappings = memoize(
       .join(",")}`,
 )
 
+const createMappingsBySource = memoize(
+  (maps: Mapped[]): Record<Category, Mapped[]> => {
+    const mappingsBySource: Record<Category, Mapped[]> = {}
+
+    maps.forEach((mapping) => {
+      if (!mappingsBySource[mapping.source]) {
+        mappingsBySource[mapping.source] = []
+      }
+
+      mappingsBySource[mapping.source].push(mapping)
+    })
+
+    return mappingsBySource
+  },
+  (maps) => JSON.stringify(maps),
+)
+
 const solution = (state: State): State => {
-  const mappingsBySource: Record<Category, Mapped[]> = {}
-  state.maps.forEach((mapping) => {
-    if (!mappingsBySource[mapping.source]) {
-      mappingsBySource[mapping.source] = []
-    }
-    mappingsBySource[mapping.source].push(mapping)
-  })
+  const mappingsBySource = createMappingsBySource(state.maps)
 
   for (const seedRange of state.seeds) {
     const seedsWithinRange = Array.from(
