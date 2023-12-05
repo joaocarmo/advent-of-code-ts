@@ -38,7 +38,7 @@ export const readFileLine = (
 /**
  * Ignore black lines (lines that are empty or only contain spaces).
  */
-export const ignoreBlackLine =
+export const ignoreBlankLine =
   (fn: (line: string, lineIndex: number) => void) =>
   (line: string, lineIndex: number) =>
     line.trim() !== "" ? fn(line, lineIndex) : undefined
