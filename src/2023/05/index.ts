@@ -1,7 +1,8 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
+import { parseSeeds } from "./parseSeedsV1"
 
-type Seed = {
+export interface Seed {
   seedRangeStart: number
   seedRangeLength: number
 }
@@ -90,10 +91,7 @@ let destination: Category = ""
 const parseLine = (state: State) => (line: string) => {
   if (line.includes("seeds")) {
     const [, seeds] = line.split(":")
-    state.seeds = seeds
-      .split(" ")
-      .filter((n) => !!n.trim())
-      .map((seed) => ({ seedRangeStart: parseInt(seed), seedRangeLength: 1 }))
+    state.seeds = parseSeeds(seeds)
   } else if (line.includes("map")) {
     const [mapName] = line.split(" ")
     const [currentSource, currentDestination] = mapName.split("-to-")
