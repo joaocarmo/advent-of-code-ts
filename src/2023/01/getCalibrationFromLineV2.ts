@@ -1,4 +1,4 @@
-import { isDigit } from "./isDigit"
+import { isDigit } from "../../utils/isDigit"
 
 enum Direction {
   left,
