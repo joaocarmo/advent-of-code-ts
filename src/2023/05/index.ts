@@ -1,3 +1,4 @@
+import memoize from "lodash/memoize"
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 import { parseSeeds } from "./parseSeedsV2"
@@ -28,26 +29,40 @@ interface State {
   paths: Path[]
 }
 
-const getCategoryNumberFromMappings = (
-  currentCategoryNumber: number,
-  currentMappings: Mapped[],
-): number => {
-  const currentMapping = currentMappings.find(
-    (m) =>
-      currentCategoryNumber >= m.sourceRangeStart &&
-      currentCategoryNumber <= m.sourceRangeStart + m.rangeLength,
-  )
+const getCategoryNumberFromMappings = memoize(
+  (currentCategoryNumber: number, currentMappings: Mapped[]): number => {
+    const currentMapping = currentMappings.find(
+      (m) =>
+        currentCategoryNumber >= m.sourceRangeStart &&
+        currentCategoryNumber <= m.sourceRangeStart + m.rangeLength,
+    )
 
-  if (!currentMapping) {
-    return currentCategoryNumber
-  }
+    if (!currentMapping) {
+      return currentCategoryNumber
+    }
 
-  const { sourceRangeStart, destinationRangeStart } = currentMapping
+    const { sourceRangeStart, destinationRangeStart } = currentMapping
 
-  return destinationRangeStart + (currentCategoryNumber - sourceRangeStart)
-}
+    return destinationRangeStart + (currentCategoryNumber - sourceRangeStart)
+  },
+  (currentCategoryNumber, currentMappings) =>
+    `${currentCategoryNumber}-${currentMappings
+      .map(
+        (m) =>
+          `${m.source}-${m.destination}-${m.sourceRangeStart}-${m.destinationRangeStart}-${m.rangeLength}`,
+      )
+      .join(",")}`,
+)
 
 const solution = (state: State): State => {
+  const mappingsBySource: Record<Category, Mapped[]> = {}
+  state.maps.forEach((mapping) => {
+    if (!mappingsBySource[mapping.source]) {
+      mappingsBySource[mapping.source] = []
+    }
+    mappingsBySource[mapping.source].push(mapping)
+  })
+
   for (const seedRange of state.seeds) {
     const seedsWithinRange = Array.from(
       { length: seedRange.seedRangeLength },
@@ -55,17 +70,17 @@ const solution = (state: State): State => {
     )
 
     for (const seed of seedsWithinRange) {
-      const path: Path = {
-        seed,
-      }
+      const path: Path = { seed }
 
       let currentCategory = "seed"
       let currentCategoryNumber = seed
 
       while (currentCategory !== "location") {
-        const currentMappings = state.maps.filter(
-          (m) => m.source === currentCategory,
-        )
+        const currentMappings = mappingsBySource[currentCategory]
+
+        if (!currentMappings || currentMappings.length === 0) {
+          break
+        }
 
         currentCategory = currentMappings[0].destination
         currentCategoryNumber = getCategoryNumberFromMappings(
