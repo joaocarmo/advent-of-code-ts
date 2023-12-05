@@ -1,7 +1,10 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 
-type Seed = number
+type Seed = {
+  seedRangeStart: number
+  seedRangeLength: number
+}
 
 type Category = string
 
@@ -14,7 +17,7 @@ interface Mapped {
 }
 
 interface Path {
-  seed: Seed
+  seed: number
   [key: Category]: number
 }
 
@@ -48,28 +51,35 @@ const getCategoryNumberFromMappings = (
 }
 
 const solution = (state: State): State => {
-  for (const seed of state.seeds) {
-    const path: Path = {
-      seed,
+  for (const seedRange of state.seeds) {
+    const seedsWithinRange = Array.from(
+      { length: seedRange.seedRangeLength },
+      (_, i) => i + seedRange.seedRangeStart,
+    )
+
+    for (const seed of seedsWithinRange) {
+      const path: Path = {
+        seed,
+      }
+
+      let currentCategory = "seed"
+      let currentCategoryNumber = seed
+
+      while (currentCategory !== "location") {
+        const currentMappings = state.maps.filter(
+          (m) => m.source === currentCategory,
+        )
+
+        currentCategory = currentMappings[0].destination
+        currentCategoryNumber = getCategoryNumberFromMappings(
+          currentCategoryNumber,
+          currentMappings,
+        )
+        path[currentCategory] = currentCategoryNumber
+      }
+
+      state.paths.push(path)
     }
-
-    let currentCategory = "seed"
-    let currentCategoryNumber = seed
-
-    while (currentCategory !== "location") {
-      const currentMappings = state.maps.filter(
-        (m) => m.source === currentCategory,
-      )
-
-      currentCategory = currentMappings[0].destination
-      currentCategoryNumber = getCategoryNumberFromMappings(
-        currentCategoryNumber,
-        currentMappings,
-      )
-      path[currentCategory] = currentCategoryNumber
-    }
-
-    state.paths.push(path)
   }
 
   return state
@@ -83,7 +93,7 @@ const parseLine = (state: State) => (line: string) => {
     state.seeds = seeds
       .split(" ")
       .filter((n) => !!n.trim())
-      .map((seed) => parseInt(seed))
+      .map((seed) => ({ seedRangeStart: parseInt(seed), seedRangeLength: 1 }))
   } else if (line.includes("map")) {
     const [mapName] = line.split(" ")
     const [currentSource, currentDestination] = mapName.split("-to-")
