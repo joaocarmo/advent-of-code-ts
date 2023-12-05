@@ -1,6 +1,6 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
-import { parseSeeds } from "./parseSeedsV1"
+import { parseSeeds } from "./parseSeedsV2"
 
 export interface Seed {
   seedRangeStart: number
@@ -42,13 +42,9 @@ const getCategoryNumberFromMappings = (
     return currentCategoryNumber
   }
 
-  const { sourceRangeStart, destinationRangeStart, rangeLength } =
-    currentMapping
+  const { sourceRangeStart, destinationRangeStart } = currentMapping
 
-  return (
-    destinationRangeStart +
-    ((currentCategoryNumber - sourceRangeStart) % rangeLength)
-  )
+  return destinationRangeStart + (currentCategoryNumber - sourceRangeStart)
 }
 
 const solution = (state: State): State => {
