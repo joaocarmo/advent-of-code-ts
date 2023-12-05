@@ -1,5 +1,5 @@
 import { parseArgs } from "@/utils/parseArgs"
-import { ignoreBlackLine, readFileLine } from "@/utils/readFile"
+import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 
 interface State {}
 
@@ -22,7 +22,7 @@ const main = async () => {
   const { inputFile } = await parseArgs()
 
   readFileLine(inputFile, {
-    onLine: ignoreBlackLine(parseLine(state)),
+    onLine: ignoreBlankLine(parseLine(state)),
     onClose: findSolution(state),
   })
 }

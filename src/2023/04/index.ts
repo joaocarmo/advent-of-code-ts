@@ -1,6 +1,6 @@
 import { extractNumber } from "@/utils/extractNumber"
 import { parseArgs } from "@/utils/parseArgs"
-import { ignoreBlackLine, readFileLine } from "@/utils/readFile"
+import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 
 type CardId = string | number
 
@@ -68,7 +68,7 @@ const main = async () => {
   const { inputFile } = await parseArgs()
 
   readFileLine(inputFile, {
-    onLine: ignoreBlackLine(parseLine(state)),
+    onLine: ignoreBlankLine(parseLine(state)),
     onClose: findSolution(state),
   })
 }
