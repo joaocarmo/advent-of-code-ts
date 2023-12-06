@@ -1,6 +1,7 @@
 import { displacement, velocity } from "@/utils/motion"
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
+import { parseRecords } from "./parseRecordsV1"
 
 const ACCELERATION = 1 // mm/ms^2
 
@@ -50,11 +51,7 @@ const parseLine = (line: string) => {
   for (const [marker, holder] of markers) {
     if (line.includes(marker)) {
       const [, recordsLine] = line.split(marker)
-      const records = recordsLine
-        .trim()
-        .split(" ")
-        .filter((n) => !!n.trim())
-        .map((n) => parseInt(n.trim(), 10))
+      const records = parseRecords(recordsLine)
 
       for (const record of records) {
         holder.push(record)
