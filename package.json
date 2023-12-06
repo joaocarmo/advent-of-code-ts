@@ -23,10 +23,11 @@
   },
   "homepage": "https://github.com/joaocarmo/advent-of-code-ts#readme",
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "@types/node": "^20.10.3",
     "@types/yargs": "^17.0.32",
-    "@typescript-eslint/eslint-plugin": "^6.13.1",
-    "@typescript-eslint/parser": "^6.13.1",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^8.0.3",
@@ -43,6 +44,7 @@
     "*.{ts,json,md}": "prettier --write"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "yargs": "^17.7.2"
   }
 }
