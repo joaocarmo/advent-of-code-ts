@@ -1,7 +1,7 @@
 import { displacement, velocity } from "@/utils/motion"
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
-import { parseRecords } from "./parseRecordsV1"
+import { parseRecords } from "./parseRecordsV2"
 
 const ACCELERATION = 1 // mm/ms^2
 

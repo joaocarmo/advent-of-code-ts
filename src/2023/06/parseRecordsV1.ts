@@ -1,4 +1,4 @@
-export const parseRecords = (line: string) =>
+export const parseRecords = (line: string): number[] =>
   line
     .trim()
     .split(" ")
