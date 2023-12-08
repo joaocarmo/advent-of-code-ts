@@ -1,8 +1,8 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
-import { cardStrength, getHandType } from "./rulesV1"
+import { cardStrength, getHandTypeWithJoker as getHandType } from "./rulesV2"
 
-const NUM_OF_CARDS_IN_HAND = 5
+export const NUM_OF_CARDS_IN_HAND = 5
 
 export type Card =
   | "A"
@@ -18,6 +18,24 @@ export type Card =
   | "4"
   | "3"
   | "2"
+
+const ALL_CARDS: Card[] = [
+  "A",
+  "K",
+  "Q",
+  "J",
+  "T",
+  "9",
+  "8",
+  "7",
+  "6",
+  "5",
+  "4",
+  "3",
+  "2",
+]
+
+export const ALL_CARDS_WITHOUT_J = ALL_CARDS.filter((card) => card !== "J")
 
 export enum Type {
   HIGH_CARD,
