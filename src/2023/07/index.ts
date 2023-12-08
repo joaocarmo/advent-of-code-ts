@@ -1,10 +1,11 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 import { get } from "lodash"
+import { cardStrength } from "./cardStrengthV1"
 
 const NUM_OF_CARDS_IN_HAND = 5
 
-type Card =
+export type Card =
   | "A"
   | "K"
   | "Q"
@@ -39,23 +40,6 @@ interface Hand {
 
 interface State {
   hands: Hand[]
-}
-
-const cardStrength = (card: Card): number => {
-  switch (card) {
-    case "A":
-      return 14
-    case "K":
-      return 13
-    case "Q":
-      return 12
-    case "J":
-      return 11
-    case "T":
-      return 10
-    default:
-      return parseInt(card, 10)
-  }
 }
 
 const getHandType = (cards: Card[]): Type => {
