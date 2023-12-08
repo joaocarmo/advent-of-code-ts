@@ -118,9 +118,7 @@ const solution = (state: State): State => {
 
 const parseLine = (state: State) => (line: string) => {
   const [hand, bid] = line.split(" ")
-  const cards = hand.split("") as Card[] /*.sort(
-    (a, b) => cardStrength(a) - cardStrength(b),
-  )*/
+  const cards = hand.split("") as Card[]
   const bidNumber = parseInt(bid, 10)
 
   state.hands.push({
