@@ -1,6 +1,6 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
-import { solution } from "./solutionV1"
+import { solution } from "./solutionV2"
 
 export enum Direction {
   Left = 0,
@@ -9,9 +9,7 @@ export enum Direction {
 
 export type Node = `${string}${string}${string}`
 
-type Network = {
-  [key in Node]: [Node, Node]
-}
+export type Network = Record<Node, [Node, Node]>
 
 export interface State {
   input: Direction[]
