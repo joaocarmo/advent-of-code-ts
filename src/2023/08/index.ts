@@ -1,44 +1,22 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
+import { solution } from "./solutionV1"
 
-enum Direction {
+export enum Direction {
   Left = 0,
   Right = 1,
 }
 
-type Node = `${string}${string}${string}`
+export type Node = `${string}${string}${string}`
 
 type Network = {
   [key in Node]: [Node, Node]
 }
 
-interface State {
+export interface State {
   input: Direction[]
   network: Network
   numberOfSteps: number
-}
-
-const solution = (state: State): State => {
-  const { input, network } = state
-  let currentIndex = 0
-  let currentNode: Node = "AAA"
-
-  while (currentNode !== "ZZZ") {
-    const [leftNode, rightNode] = network[currentNode]
-
-    if (input[currentIndex] === Direction.Left) {
-      currentNode = leftNode
-    } else {
-      currentNode = rightNode
-    }
-    state.numberOfSteps += 1
-    currentIndex += 1
-    if (currentIndex === input.length) {
-      currentIndex = 0
-    }
-  }
-
-  return state
 }
 
 const parseLine = (state: State) => (line: string, lineIndex: number) => {
