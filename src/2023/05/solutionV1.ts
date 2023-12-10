@@ -3,6 +3,7 @@ import { getCategoryNumberFromMappings } from "./getCategoryNumberFromMappings"
 import type { Path, State } from "."
 
 export const solution = (state: State): State => {
+  state.seeds.sort((a, b) => a.seedRangeStart - b.seedRangeStart)
   const mappingsBySource = createMappingsBySource(state.maps)
 
   for (const seedRange of state.seeds) {

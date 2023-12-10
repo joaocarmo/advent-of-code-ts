@@ -5,13 +5,19 @@ export const createMappingsBySource = (
 ): Record<Category, Mapped[]> => {
   const mappingsBySource: Record<Category, Mapped[]> = {}
 
-  maps.forEach((mapping) => {
+  for (const mapping of maps) {
     if (!mappingsBySource[mapping.source]) {
       mappingsBySource[mapping.source] = []
     }
 
     mappingsBySource[mapping.source].push(mapping)
-  })
+  }
+
+  for (const category in mappingsBySource) {
+    mappingsBySource[category].sort(
+      (a, b) => a.sourceRangeStart - b.sourceRangeStart,
+    )
+  }
 
   return mappingsBySource
 }

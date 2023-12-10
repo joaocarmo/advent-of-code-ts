@@ -7,7 +7,7 @@ export const getCategoryNumberFromMappings = (
   const currentMapping = currentMappings.find(
     (m) =>
       currentCategoryNumber >= m.sourceRangeStart &&
-      currentCategoryNumber <= m.sourceRangeStart + m.rangeLength,
+      currentCategoryNumber < m.sourceRangeStart + m.rangeLength,
   )
 
   if (!currentMapping) {
