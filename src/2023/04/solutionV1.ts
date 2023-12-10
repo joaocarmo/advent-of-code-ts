@@ -2,12 +2,17 @@ import type { State } from "."
 
 const solution = (state: State): State => {
   for (const cardId in state.cards) {
-    const card = state.cards[cardId][0]
+    const cards = state.cards[cardId]
 
-    for (const numberWeHave of card.numbersWeHave) {
-      if (card.winningNumbers.includes(numberWeHave)) {
-        state.cards[cardId][0].points = 2 ** state.cards[cardId][0].numOfMatches
-        state.cards[cardId][0].numOfMatches++
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i]
+
+      for (const numberWeHave of card.numbersWeHave) {
+        if (card.winningNumbers.includes(numberWeHave)) {
+          state.cards[cardId][i].points =
+            2 ** state.cards[cardId][i].numOfMatches
+          state.cards[cardId][i].numOfMatches++
+        }
       }
     }
   }
