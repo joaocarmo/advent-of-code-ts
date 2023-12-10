@@ -1,6 +1,7 @@
 import { extractNumber } from "@/utils/extractNumber"
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
+import { findSolution } from "./solutionV1"
 
 type CardId = string | number
 
@@ -11,25 +12,10 @@ interface Card {
   points: number
 }
 
-interface State {
+export interface State {
   cards: {
     [key: CardId]: Card[]
   }
-}
-
-const solution = (state: State): State => {
-  for (const cardId in state.cards) {
-    const card = state.cards[cardId][0]
-
-    for (const numberWeHave of card.numbersWeHave) {
-      if (card.winningNumbers.includes(numberWeHave)) {
-        state.cards[cardId][0].points = 2 ** state.cards[cardId][0].numOfMatches
-        state.cards[cardId][0].numOfMatches++
-      }
-    }
-  }
-
-  return state
 }
 
 const parseLine = (state: State) => (line: string) => {
@@ -49,16 +35,6 @@ const parseLine = (state: State) => (line: string) => {
       points: 0,
     },
   ]
-}
-
-const findSolution = (state: State) => () => {
-  const result = solution(state)
-  const totalPoints = Object.values(result.cards).reduce(
-    (acc, card) => acc + card[0].points,
-    0,
-  )
-
-  console.log({ totalPoints })
 }
 
 const main = async () => {
