@@ -7,6 +7,7 @@ type CardId = string | number
 interface Card {
   winningNumbers: number[]
   numbersWeHave: number[]
+  numOfMatches: number
   points: number
 }
 
@@ -17,19 +18,15 @@ interface State {
 }
 
 const solution = (state: State): State => {
-  let numOfMatches = 0
-
   for (const cardId in state.cards) {
     const card = state.cards[cardId]
 
     for (const numberWeHave of card.numbersWeHave) {
       if (card.winningNumbers.includes(numberWeHave)) {
-        state.cards[cardId].points = 2 ** numOfMatches
-        numOfMatches++
+        state.cards[cardId].points = 2 ** state.cards[cardId].numOfMatches
+        state.cards[cardId].numOfMatches++
       }
     }
-
-    numOfMatches = 0
   }
 
   return state
@@ -47,6 +44,7 @@ const parseLine = (state: State) => (line: string) => {
       .split(" ")
       .filter((n) => !!n.trim())
       .map(Number),
+    numOfMatches: 0,
     points: 0,
   }
 }
