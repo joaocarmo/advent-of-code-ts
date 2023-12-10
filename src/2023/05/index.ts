@@ -1,4 +1,3 @@
-import memoize from "lodash/memoize"
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 import { parseSeeds } from "./parseSeedsV2"
@@ -29,47 +28,38 @@ interface State {
   paths: Path[]
 }
 
-const getCategoryNumberFromMappings = memoize(
-  (currentCategoryNumber: number, currentMappings: Mapped[]): number => {
-    const currentMapping = currentMappings.find(
-      (m) =>
-        currentCategoryNumber >= m.sourceRangeStart &&
-        currentCategoryNumber <= m.sourceRangeStart + m.rangeLength,
-    )
+const getCategoryNumberFromMappings = (
+  currentCategoryNumber: number,
+  currentMappings: Mapped[],
+): number => {
+  const currentMapping = currentMappings.find(
+    (m) =>
+      currentCategoryNumber >= m.sourceRangeStart &&
+      currentCategoryNumber <= m.sourceRangeStart + m.rangeLength,
+  )
 
-    if (!currentMapping) {
-      return currentCategoryNumber
+  if (!currentMapping) {
+    return currentCategoryNumber
+  }
+
+  const { sourceRangeStart, destinationRangeStart } = currentMapping
+
+  return destinationRangeStart + (currentCategoryNumber - sourceRangeStart)
+}
+
+const createMappingsBySource = (maps: Mapped[]): Record<Category, Mapped[]> => {
+  const mappingsBySource: Record<Category, Mapped[]> = {}
+
+  maps.forEach((mapping) => {
+    if (!mappingsBySource[mapping.source]) {
+      mappingsBySource[mapping.source] = []
     }
 
-    const { sourceRangeStart, destinationRangeStart } = currentMapping
+    mappingsBySource[mapping.source].push(mapping)
+  })
 
-    return destinationRangeStart + (currentCategoryNumber - sourceRangeStart)
-  },
-  (currentCategoryNumber, currentMappings) =>
-    `${currentCategoryNumber}-${currentMappings
-      .map(
-        (m) =>
-          `${m.source}-${m.destination}-${m.sourceRangeStart}-${m.destinationRangeStart}-${m.rangeLength}`,
-      )
-      .join(",")}`,
-)
-
-const createMappingsBySource = memoize(
-  (maps: Mapped[]): Record<Category, Mapped[]> => {
-    const mappingsBySource: Record<Category, Mapped[]> = {}
-
-    maps.forEach((mapping) => {
-      if (!mappingsBySource[mapping.source]) {
-        mappingsBySource[mapping.source] = []
-      }
-
-      mappingsBySource[mapping.source].push(mapping)
-    })
-
-    return mappingsBySource
-  },
-  (maps) => JSON.stringify(maps),
-)
+  return mappingsBySource
+}
 
 const solution = (state: State): State => {
   const mappingsBySource = createMappingsBySource(state.maps)
