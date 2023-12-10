@@ -14,7 +14,7 @@ const parseLine = (state: State) => (line: string) => {
 const findSolution = (state: State) => () => {
   const result = solution(state)
 
-  console.log({ result })
+  console.log(JSON.stringify({ result }, null, 2))
 }
 
 const main = async () => {
