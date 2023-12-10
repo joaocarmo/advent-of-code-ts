@@ -1,6 +1,6 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
-import { solution } from "./solutionV2"
+import { findSolution } from "./solutionV2"
 
 export enum Direction {
   Left = 0,
@@ -35,12 +35,6 @@ const parseLine = (state: State) => (line: string, lineIndex: number) => {
 
     state.network[node as Node] = [left as Node, right as Node]
   }
-}
-
-const findSolution = (state: State) => () => {
-  const { numberOfSteps } = solution(state)
-
-  console.log({ numberOfSteps })
 }
 
 const main = async () => {

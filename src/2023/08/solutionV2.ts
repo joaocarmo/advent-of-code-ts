@@ -1,45 +1,44 @@
+import lcm from "compute-lcm"
 import { Direction } from "."
 import type { Network, Node, State } from "."
 
 const getInitialNodes = (network: Network): Node[] =>
   Object.keys(network).filter((node) => node.endsWith("A"))
 
-const getNextNodes = (
-  previousNodes: Node[],
-  network: Network,
-  direction: Direction,
-): Node[] => {
-  const nextNodes = [...previousNodes]
+export const findSolution = (state: State) => () => {
+  const nodesNumberOfSteps = solution(state)
+  const numberOfSteps = lcm(Object.values(nodesNumberOfSteps))
 
-  for (let i = 0; i < nextNodes.length; i++) {
-    let nextNode = nextNodes[i]
-    const [leftNode, rightNode] = network[nextNode]
-
-    if (direction === Direction.Left) {
-      nextNode = leftNode
-    } else {
-      nextNode = rightNode
-    }
-
-    nextNodes[i] = nextNode
-  }
-
-  return nextNodes
+  console.log({ numberOfSteps })
 }
-export const solution = (state: State): State => {
+
+const solution = (state: State): Record<Node, number> => {
   const { input, network } = state
   let currentIndex = 0
-  let currentNodes = getInitialNodes(network)
+  const initialNodes = getInitialNodes(network)
+  const nodesNumberOfSteps: Record<Node, number> = {}
 
-  while (!currentNodes.every((node) => node.endsWith("Z"))) {
-    currentNodes = getNextNodes(currentNodes, network, input[currentIndex])
+  for (const node of initialNodes) {
+    nodesNumberOfSteps[node] = 0
+    let currentNode = node
 
-    state.numberOfSteps += 1
-    currentIndex += 1
-    if (currentIndex === input.length) {
-      currentIndex = 0
+    while (!currentNode.endsWith("Z")) {
+      const [leftNode, rightNode] = network[currentNode]
+      const direction = input[currentIndex]
+
+      if (direction === Direction.Left) {
+        currentNode = leftNode
+      } else {
+        currentNode = rightNode
+      }
+
+      nodesNumberOfSteps[node] += 1
+      currentIndex += 1
+      if (currentIndex === input.length) {
+        currentIndex = 0
+      }
     }
   }
 
-  return state
+  return nodesNumberOfSteps
 }
