@@ -1,7 +1,7 @@
 import { extractNumber } from "@/utils/extractNumber"
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
-import { findSolution } from "./solutionV1"
+import { findSolution } from "./solutionV2"
 
 type CardId = string | number
 
