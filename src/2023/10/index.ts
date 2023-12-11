@@ -39,9 +39,9 @@ const findSolution = (state: State) => () => {
   const numStepsOfLargestLoop = solution(state)
 
   console.log({ numStepsOfLargestLoop })
-  console.log(state.grid.toString())
-  console.log("")
-  console.log(state.grid.toDistances())
+  // console.log(state.grid.toString())
+  // console.log("")
+  // console.log(state.grid.toDistances())
 }
 
 const main = async () => {

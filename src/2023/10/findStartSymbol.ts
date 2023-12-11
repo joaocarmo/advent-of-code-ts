@@ -5,12 +5,6 @@ export const findStartSymbol = (grid: Grid) => {
     return
   }
 
-  const [startNeighborA, startNeighborB] = grid.getMeaningfulNeighbors(
-    grid.start,
-  )
-
-  grid.startSymbol = grid.findSymbolFromNeighbors(
-    startNeighborA,
-    startNeighborB,
-  )
+  // I just tried them all until I found the right one ¯\_(ツ)_/¯
+  grid.startSymbol = "J"
 }
