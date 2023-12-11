@@ -46,7 +46,7 @@ export class Point {
 export class Grid {
   private grid: Tile[][] = []
   public start: Point | null = null
-  private startSymbol: TileSymbol | null = null
+  public startSymbol: TileSymbol | null = null
 
   public constructor() {}
 
@@ -78,21 +78,6 @@ export class Grid {
       ...this.get(p),
       distance: 0,
     })
-  }
-
-  public findStartSymbol(): void {
-    if (this.start === null) {
-      return
-    }
-
-    const [startNeighborA, startNeighborB] = this.getMeaningfulNeighbors(
-      this.start,
-    )
-
-    this.startSymbol = this.findSymbolFromNeighbors(
-      startNeighborA,
-      startNeighborB,
-    )
   }
 
   public getNextNeighbors(p: Point): Point[] {
