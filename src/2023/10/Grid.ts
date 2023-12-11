@@ -129,7 +129,9 @@ export class Grid {
         throw new Error(`Unknown symbol: ${this.get(p).symbol}`)
     }
 
-    return neighbors.filter((p) => this.isMeaningful(p))
+    return neighbors.filter(
+      (p) => this.isWithinBounds(p) && this.isMeaningful(p),
+    )
   }
 
   public getNeighbors(p: Point): Point[] {
@@ -155,13 +157,21 @@ export class Grid {
   }
 
   public getMeaningfulNeighbors(p: Point): Point[] {
-    return this.getNeighbors(p).filter((p) => this.isMeaningful(p))
+    return this.getNeighbors(p).filter(
+      (p) => this.isWithinBounds(p) && this.isMeaningful(p),
+    )
   }
 
   public isMeaningful(p: Point): boolean {
     const tile = this.get(p)
 
     return tile.symbol !== "." && tile.symbol !== "S"
+  }
+
+  public isWithinBounds(p: Point): boolean {
+    const [width, height] = this.getDimensions()
+
+    return p.x >= 0 && p.x < width && p.y >= 0 && p.y < height
   }
 
   public findSymbolFromNeighbors(
