@@ -2,6 +2,7 @@ import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 import { Grid, Point, convertStringToTile } from "./Grid"
 import { findPaths } from "./findPaths"
+import { findLargestLoop } from "./findLargestLoop"
 
 interface State {
   grid: Grid
@@ -9,8 +10,9 @@ interface State {
 
 const solution = (state: State): number => {
   state.grid.findStartSymbol()
+  findPaths(state.grid)
 
-  return findPaths(state.grid)
+  return findLargestLoop(state.grid)
 }
 
 const parseLine = (state: State) => (line: string, lineIndex: number) => {

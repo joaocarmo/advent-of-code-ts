@@ -58,6 +58,10 @@ export class Grid {
     this.grid[p.y][p.x] = tile
   }
 
+  public getDimensions(): [number, number] {
+    return [this.grid[0].length, this.grid.length]
+  }
+
   public addRow(row: Tile[]): void {
     this.grid.push(row)
   }

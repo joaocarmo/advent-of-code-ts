@@ -1,11 +1,10 @@
 import type { Grid, Point } from "./Grid"
 
-export const findPaths = (grid: Grid): number => {
+export const findPaths = (grid: Grid) => {
   if (grid.start === null) {
-    return 0
+    return
   }
 
-  let maxDistance = 0
   const queue: Point[] = [grid.start]
 
   while (queue.length > 0) {
@@ -21,11 +20,8 @@ export const findPaths = (grid: Grid): number => {
         distance,
       })
       queue.push(neighbor)
-      maxDistance = Math.max(maxDistance, distance)
     }
 
     grid.get(p).visited = true
   }
-
-  return maxDistance
 }
