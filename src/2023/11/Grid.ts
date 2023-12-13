@@ -1,4 +1,5 @@
-const DISTANCE_APART = 1
+const DISTANCE_APART = 10
+const DIFF_TO_ADD = DISTANCE_APART > 1 ? DISTANCE_APART - 1 : DISTANCE_APART
 
 export enum UniverseObject {
   EmptySpace = ".",
@@ -83,10 +84,10 @@ export class Grid {
         this.grid[i].splice(
           acc + index,
           0,
-          ...Array.from({ length: DISTANCE_APART }).map(() => emptyTile),
+          ...Array.from({ length: DIFF_TO_ADD }).map(() => emptyTile),
         )
       }
-      acc += DISTANCE_APART
+      acc += DIFF_TO_ADD
     }
 
     // Expand the rows
@@ -100,9 +101,9 @@ export class Grid {
       this.grid.splice(
         acc + index,
         0,
-        ...Array.from({ length: DISTANCE_APART }).map(() => emptyRow),
+        ...Array.from({ length: DIFF_TO_ADD }).map(() => emptyRow),
       )
-      acc += DISTANCE_APART
+      acc += DIFF_TO_ADD
     }
   }
 
