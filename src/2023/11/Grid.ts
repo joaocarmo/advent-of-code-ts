@@ -1,3 +1,5 @@
+const DISTANCE_APART = 1
+
 export enum UniverseObject {
   EmptySpace = ".",
   Galaxy = "#",
@@ -51,47 +53,56 @@ export class Grid {
   expand() {
     const numOfRows = this.grid.length
     let numOfCols = this.grid[0].length
-    const emptyRowsIndexes: number[] = []
     const emptyTile = { type: UniverseObject.EmptySpace, galaxy: null }
+    const emptyRowsIndexes: number[] = []
+    const emptyColsIndexes: number[] = []
     let acc = 0
 
-    // Expand the columns
-    const emptyColsIndexes: number[] = []
-
-    for (let i = 0; i < numOfCols; i++) {
-      const col = this.grid.map((row) => row[i])
+    for (let x = 0; x < numOfCols; x++) {
+      const col = this.grid.map((row) => row[x])
       const colContainsGalaxies = col.some(isGalaxy)
 
       if (!colContainsGalaxies) {
-        emptyColsIndexes.push(i)
+        emptyColsIndexes.push(x)
       }
     }
 
+    for (let y = 0; y < numOfRows; y++) {
+      const row = this.grid[y]
+      const rowContainsGalaxies = row.some(isGalaxy)
+
+      if (!rowContainsGalaxies) {
+        emptyRowsIndexes.push(y)
+      }
+    }
+
+    // Expand the columns
     acc = 0
     for (const index of emptyColsIndexes) {
       for (let i = 0; i < numOfRows; i++) {
-        this.grid[i].splice(acc + index, 0, emptyTile)
+        this.grid[i].splice(
+          acc + index,
+          0,
+          ...Array.from({ length: DISTANCE_APART }).map(() => emptyTile),
+        )
       }
-      acc++
+      acc += DISTANCE_APART
     }
 
     // Expand the rows
     numOfCols = this.grid[0].length
-    const emptyRow = Array(numOfCols).fill(emptyTile)
-
-    for (let i = 0; i < numOfRows; i++) {
-      const row = this.grid[i]
-      const rowContainsGalaxies = row.some(isGalaxy)
-
-      if (!rowContainsGalaxies) {
-        emptyRowsIndexes.push(i)
-      }
-    }
+    const emptyRow = Array.from({ length: numOfCols }).fill(
+      emptyTile,
+    ) as UniverseTile[]
 
     acc = 0
     for (const index of emptyRowsIndexes) {
-      this.grid.splice(acc + index, 0, emptyRow)
-      acc++
+      this.grid.splice(
+        acc + index,
+        0,
+        ...Array.from({ length: DISTANCE_APART }).map(() => emptyRow),
+      )
+      acc += DISTANCE_APART
     }
   }
 
