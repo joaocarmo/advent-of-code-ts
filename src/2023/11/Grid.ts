@@ -36,6 +36,22 @@ export class Grid {
     this.grid.push(row)
   }
 
+  getRows(): UniverseTile[][] {
+    return this.grid
+  }
+
+  getColums(): UniverseTile[][] {
+    const numOfCols = this.grid[0].length
+    const columns: UniverseTile[][] = []
+
+    for (let i = 0; i < numOfCols; i++) {
+      const column = this.grid.map((row) => row[i])
+      columns.push(column)
+    }
+
+    return columns
+  }
+
   findGalaxies() {
     const numOfRows = this.grid.length
     const numOfCols = this.grid[0].length

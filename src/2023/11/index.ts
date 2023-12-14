@@ -10,7 +10,7 @@ interface State {
 }
 
 const solution = (state: State): number[] => {
-  state.universe.expand()
+  // state.universe.expand()
   state.universe.findGalaxies()
 
   const uniquePairsOfGalaxies = findUniquePairsOfGalaxies(
@@ -18,6 +18,7 @@ const solution = (state: State): number[] => {
   )
   const shortestPaths = findShortestPathsBetweenPairsOfGalaxies(
     uniquePairsOfGalaxies,
+    state.universe,
   )
 
   return shortestPaths
