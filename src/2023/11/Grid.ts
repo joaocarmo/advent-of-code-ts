@@ -1,4 +1,4 @@
-const DISTANCE_APART = 10
+const DISTANCE_APART = 1
 const DIFF_TO_ADD = DISTANCE_APART > 1 ? DISTANCE_APART - 1 : DISTANCE_APART
 
 export enum UniverseObject {
@@ -79,13 +79,14 @@ export class Grid {
 
     // Expand the columns
     acc = 0
+    const emptyTiles = Array.from({ length: DIFF_TO_ADD }).map(() => emptyTile)
+
     for (const index of emptyColsIndexes) {
       for (let i = 0; i < numOfRows; i++) {
-        this.grid[i].splice(
-          acc + index,
-          0,
-          ...Array.from({ length: DIFF_TO_ADD }).map(() => emptyTile),
-        )
+        const rowStart = this.grid[i].slice(0, acc + index)
+        const rowEnd = this.grid[i].slice(acc + index)
+
+        this.grid[i] = [...rowStart, ...emptyTiles, ...rowEnd]
       }
       acc += DIFF_TO_ADD
     }
@@ -97,12 +98,14 @@ export class Grid {
     ) as UniverseTile[]
 
     acc = 0
+    const emptyRows = Array.from({ length: DIFF_TO_ADD }, () => emptyRow)
+
     for (const index of emptyRowsIndexes) {
-      this.grid.splice(
-        acc + index,
-        0,
-        ...Array.from({ length: DIFF_TO_ADD }).map(() => emptyRow),
-      )
+      const gridStart = this.grid.slice(0, acc + index)
+      const gridEnd = this.grid.slice(acc + index)
+
+      this.grid = [...gridStart, ...emptyRows, ...gridEnd]
+
       acc += DIFF_TO_ADD
     }
   }
