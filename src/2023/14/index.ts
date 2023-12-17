@@ -8,7 +8,7 @@ interface State {
 }
 
 const solution = (state: State): number[][] => {
-  state.grid.tilt()
+  state.grid.tiltAll()
   state.grid.calculateLoad()
 
   return state.grid.getLoad()
@@ -26,7 +26,6 @@ const findSolution = (state: State) => () => {
     0,
   )
 
-  console.log(state.grid.toString())
   console.log({ totalLoad })
 }
 

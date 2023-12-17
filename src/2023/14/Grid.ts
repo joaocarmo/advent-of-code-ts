@@ -1,5 +1,16 @@
 export type Element = "#" | "O" | "."
 
+class Point {
+  constructor(
+    public x: number,
+    public y: number,
+  ) {}
+
+  public nextPoint(): Point {
+    return new Point(this.x, this.y + 1)
+  }
+}
+
 export class Grid {
   private grid: Element[][]
   private load: number[][]
@@ -13,7 +24,63 @@ export class Grid {
     this.grid.push(row)
   }
 
-  public tilt() {}
+  public getElement(point: Point): Element {
+    return this.grid?.[point.y]?.[point.x] || "#"
+  }
+
+  public setElement(point: Point, element: Element) {
+    if (
+      point.y < 0 ||
+      point.y >= this.grid.length ||
+      point.x < 0 ||
+      point.x >= this.grid[point.y].length
+    ) {
+      return
+    }
+
+    this.grid[point.y][point.x] = element
+  }
+
+  public tilt(): number {
+    const N = this.grid.length
+    let currentPoint = new Point(0, 0)
+    let tiltedRocks = 0
+
+    outerLoop: for (let y = 0; y < N; y++) {
+      const row = this.grid[y]
+
+      if (!row) {
+        continue outerLoop
+      }
+
+      innerLoop: for (let x = 0; x < row.length; x++) {
+        currentPoint = new Point(x, y)
+        const element = this.getElement(currentPoint)
+
+        if (element !== ".") {
+          continue innerLoop
+        }
+
+        const nextElement = this.getElement(currentPoint.nextPoint())
+
+        if (nextElement === "O") {
+          this.setElement(currentPoint, "O")
+          this.setElement(currentPoint.nextPoint(), ".")
+          tiltedRocks++
+        }
+      }
+    }
+
+    return tiltedRocks
+  }
+
+  public tiltAll() {
+    let tiltedRocks = 0
+
+    do {
+      tiltedRocks = this.tilt()
+    } while (tiltedRocks > 0)
+  }
 
   public calculateLoad() {
     const N = this.grid.length
@@ -38,10 +105,9 @@ export class Grid {
     return this.grid
       .map(
         (row, i) =>
-          `${row.join("")} ${this.load[i].reduce(
-            (acc, load) => acc + load,
-            0,
-          )}`,
+          `${row.join("")} ${
+            this.load[i]?.reduce((acc, load) => acc + load, 0) ?? ""
+          }`,
       )
       .join("\n")
   }
