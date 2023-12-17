@@ -2,7 +2,6 @@ import { Pattern } from "."
 
 const findReflectionInArray = (arr: string[]): number | null => {
   const N = arr.length
-  let reflection: number | null = null
 
   for (let i = 0; i < N; i++) {
     let isReflection = true
@@ -13,6 +12,11 @@ const findReflectionInArray = (arr: string[]): number | null => {
       const row1 = arr[leftIndex]
       const row2 = arr[rightIndex]
 
+      if (leftIndex < 0 || rightIndex >= N) {
+        isReflection = false
+        break
+      }
+
       if (row1 !== row2) {
         isReflection = false
         break
@@ -20,11 +24,11 @@ const findReflectionInArray = (arr: string[]): number | null => {
     }
 
     if (isReflection) {
-      reflection = i
+      return i
     }
   }
 
-  return reflection
+  return null
 }
 
 export const findReflection = (pattern: Pattern): Pattern => {
