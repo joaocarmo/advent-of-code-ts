@@ -1,3 +1,10 @@
+enum Direction {
+  North,
+  East,
+  South,
+  West,
+}
+
 export type Element = "#" | "O" | "."
 
 class Point {
@@ -6,8 +13,17 @@ class Point {
     public y: number,
   ) {}
 
-  public nextPoint(): Point {
-    return new Point(this.x, this.y + 1)
+  public nextPoint(direction: Direction): Point {
+    switch (direction) {
+      case Direction.North:
+        return new Point(this.x, this.y + 1)
+      case Direction.East:
+        return new Point(this.x + 1, this.y)
+      case Direction.South:
+        return new Point(this.x, this.y - 1)
+      case Direction.West:
+        return new Point(this.x - 1, this.y)
+    }
   }
 }
 
@@ -41,7 +57,7 @@ export class Grid {
     this.grid[point.y][point.x] = element
   }
 
-  public tilt(): number {
+  public tilt(direction: Direction): number {
     const N = this.grid.length
     let currentPoint = new Point(0, 0)
     let tiltedRocks = 0
@@ -61,11 +77,11 @@ export class Grid {
           continue innerLoop
         }
 
-        const nextElement = this.getElement(currentPoint.nextPoint())
+        const nextElement = this.getElement(currentPoint.nextPoint(direction))
 
         if (nextElement === "O") {
           this.setElement(currentPoint, "O")
-          this.setElement(currentPoint.nextPoint(), ".")
+          this.setElement(currentPoint.nextPoint(direction), ".")
           tiltedRocks++
         }
       }
@@ -78,7 +94,7 @@ export class Grid {
     let tiltedRocks = 0
 
     do {
-      tiltedRocks = this.tilt()
+      tiltedRocks = this.tilt(Direction.North)
     } while (tiltedRocks > 0)
   }
 
