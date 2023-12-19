@@ -1,9 +1,13 @@
+const NUM_OF_CYCLES = 1000000000
+
 enum Direction {
   North,
   East,
   South,
   West,
 }
+
+const CYCLE = [Direction.North]
 
 export type Element = "#" | "O" | "."
 
@@ -93,9 +97,15 @@ export class Grid {
   public tiltAll() {
     let tiltedRocks = 0
 
-    do {
-      tiltedRocks = this.tilt(Direction.North)
-    } while (tiltedRocks > 0)
+    for (let i = 0; i < NUM_OF_CYCLES; i++) {
+      for (const direction of CYCLE) {
+        tiltedRocks = this.tilt(direction)
+      }
+
+      if (tiltedRocks === 0) {
+        break
+      }
+    }
   }
 
   public calculateLoad() {
