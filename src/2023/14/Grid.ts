@@ -18,11 +18,11 @@ class Point {
       case Direction.North:
         return new Point(this.x, this.y + 1)
       case Direction.East:
-        return new Point(this.x + 1, this.y)
+        return new Point(this.x - 1, this.y)
       case Direction.South:
         return new Point(this.x, this.y - 1)
       case Direction.West:
-        return new Point(this.x - 1, this.y)
+        return new Point(this.x + 1, this.y)
     }
   }
 }
