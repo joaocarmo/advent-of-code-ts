@@ -1,17 +1,23 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
-import { Grid } from "./Grid"
+import { Direction, Grid } from "./Grid"
 import type { Element } from "./Grid"
+
+const NUM_OF_CYCLES = 1
+const CYCLE = [Direction.North]
 
 interface State {
   grid: Grid
 }
 
-const solution = (state: State): number[][] => {
-  state.grid.tiltAll()
-  state.grid.calculateLoad()
+const solution = (state: State): number => {
+  for (let i = 0; i < NUM_OF_CYCLES; i++) {
+    for (const direction of CYCLE) {
+      state.grid.tiltAll(direction)
+    }
+  }
 
-  return state.grid.getLoad()
+  return state.grid.getTotalLoad()
 }
 
 const parseLine = (state: State) => (line: string) => {
@@ -20,11 +26,7 @@ const parseLine = (state: State) => (line: string) => {
 }
 
 const findSolution = (state: State) => () => {
-  const result = solution(state)
-  const totalLoad = result.reduce(
-    (acc, row) => acc + row.reduce((acc, load) => acc + load, 0),
-    0,
-  )
+  const totalLoad = solution(state)
 
   console.log({ totalLoad })
 }

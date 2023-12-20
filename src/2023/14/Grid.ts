@@ -1,13 +1,9 @@
-const NUM_OF_CYCLES = 1000000000
-
-enum Direction {
+export enum Direction {
   North,
-  East,
-  South,
   West,
+  South,
+  East,
 }
-
-const CYCLE = [Direction.North]
 
 export type Element = "#" | "O" | "."
 
@@ -34,10 +30,12 @@ class Point {
 export class Grid {
   private grid: Element[][]
   private load: number[][]
+  private cache: Map<string, number>
 
   constructor() {
     this.grid = []
     this.load = []
+    this.cache = new Map<string, number>()
   }
 
   public addRow(row: Element[]) {
@@ -59,6 +57,10 @@ export class Grid {
     }
 
     this.grid[point.y][point.x] = element
+  }
+
+  public getCachedKey(direction: Direction): string {
+    return `${direction}-${this.toCacheString()}`
   }
 
   public tilt(direction: Direction): number {
@@ -94,18 +96,12 @@ export class Grid {
     return tiltedRocks
   }
 
-  public tiltAll() {
+  public tiltAll(direction: Direction) {
     let tiltedRocks = 0
 
-    for (let i = 0; i < NUM_OF_CYCLES; i++) {
-      for (const direction of CYCLE) {
-        tiltedRocks = this.tilt(direction)
-      }
-
-      if (tiltedRocks === 0) {
-        break
-      }
-    }
+    do {
+      tiltedRocks = this.tilt(direction)
+    } while (tiltedRocks > 0)
   }
 
   public calculateLoad() {
@@ -125,6 +121,19 @@ export class Grid {
 
   public getLoad(): number[][] {
     return this.load
+  }
+
+  public getTotalLoad(): number {
+    this.calculateLoad()
+
+    return this.getLoad().reduce(
+      (acc, row) => acc + row.reduce((acc, load) => acc + load, 0),
+      0,
+    )
+  }
+
+  private toCacheString(): string {
+    return this.grid.map((row) => row.join("")).join("")
   }
 
   public toString(): string {
