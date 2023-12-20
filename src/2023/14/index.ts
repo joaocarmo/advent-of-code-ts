@@ -3,15 +3,20 @@ import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 import { Direction, Grid } from "./Grid"
 import type { Element } from "./Grid"
 
-const NUM_OF_CYCLES = 1
-const CYCLE = [Direction.North]
+const NUM_OF_CYCLES = 1000000000
+// const CYCLE = [Direction.North]
+const CYCLE = [Direction.North, Direction.West, Direction.South, Direction.East]
 
 interface State {
   grid: Grid
 }
 
 const solution = (state: State): number => {
-  for (let i = 0; i < NUM_OF_CYCLES; i++) {
+  const doneIterations = state.grid.findPeriod(CYCLE)
+  const periodicity = state.grid.cache.size
+  const iterationsLeft = (NUM_OF_CYCLES - doneIterations) % (periodicity - 1)
+
+  for (let i = 0; i < iterationsLeft; i++) {
     for (const direction of CYCLE) {
       state.grid.tiltAll(direction)
     }

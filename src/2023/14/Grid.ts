@@ -30,12 +30,12 @@ class Point {
 export class Grid {
   private grid: Element[][]
   private load: number[][]
-  private cache: Map<string, number>
+  public cache: Map<string, string>
 
   constructor() {
     this.grid = []
     this.load = []
-    this.cache = new Map<string, number>()
+    this.cache = new Map<string, string>()
   }
 
   public addRow(row: Element[]) {
@@ -104,7 +104,32 @@ export class Grid {
     } while (tiltedRocks > 0)
   }
 
+  public findPeriod(cycle: Direction[]): number {
+    let i = 0
+    let j = 0
+
+    do {
+      for (const direction of cycle) {
+        j++
+        const cacheKey = this.getCachedKey(direction)
+
+        if (this.cache.has(cacheKey)) {
+          this.fromCacheString(this.cache.get(cacheKey)!)
+          i++
+          continue
+        }
+
+        this.tiltAll(direction)
+        this.cache.set(cacheKey, this.toCacheString())
+        i = 0
+      }
+    } while (i < this.cache.size)
+
+    return j
+  }
+
   public calculateLoad() {
+    this.load = []
     const N = this.grid.length
 
     for (let i = 0; i < N; i++) {
@@ -133,7 +158,17 @@ export class Grid {
   }
 
   private toCacheString(): string {
-    return this.grid.map((row) => row.join("")).join("")
+    return this.grid.map((row) => row.join("")).join("\n")
+  }
+
+  private fromCacheString(cacheString: string) {
+    const grid: Element[][] = []
+
+    for (const row of cacheString.split("\n")) {
+      grid.push(row.split("") as Element[])
+    }
+
+    this.grid = grid
   }
 
   public toString(): string {
