@@ -59,10 +59,6 @@ export class Grid {
     this.grid[point.y][point.x] = element
   }
 
-  public getCachedKey(direction: Direction): string {
-    return `${direction}-${this.toCacheString()}`
-  }
-
   public tilt(direction: Direction): number {
     const N = this.grid.length
     let currentPoint = new Point(0, 0)
@@ -110,8 +106,7 @@ export class Grid {
 
     do {
       for (const direction of cycle) {
-        j++
-        const cacheKey = this.getCachedKey(direction)
+        const cacheKey = this.toCacheString()
 
         if (this.cache.has(cacheKey)) {
           this.fromCacheString(this.cache.get(cacheKey)!)
@@ -121,8 +116,11 @@ export class Grid {
 
         this.tiltAll(direction)
         this.cache.set(cacheKey, this.toCacheString())
+
         i = 0
       }
+
+      j++
     } while (i < this.cache.size)
 
     return j
