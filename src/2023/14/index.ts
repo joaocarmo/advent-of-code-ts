@@ -4,7 +4,6 @@ import { Direction, Grid } from "./Grid"
 import type { Element } from "./Grid"
 
 const NUM_OF_CYCLES = 1000000000
-// const CYCLE = [Direction.North]
 const CYCLE = [Direction.North, Direction.West, Direction.South, Direction.East]
 
 interface State {
@@ -14,7 +13,7 @@ interface State {
 const solution = (state: State): number => {
   const doneIterations = state.grid.findPeriod(CYCLE)
   const periodicity = state.grid.cache.size
-  const iterationsLeft = (NUM_OF_CYCLES - doneIterations) % (periodicity - 1)
+  const iterationsLeft = (NUM_OF_CYCLES - doneIterations) % periodicity
 
   for (let i = 0; i < iterationsLeft; i++) {
     for (const direction of CYCLE) {
