@@ -11,11 +11,16 @@ interface State {
 }
 
 const asciiHash = (text: string): number => {
-  if (!text) {
-    return 0
+  let currentValue = 0
+
+  for (const char of text.split("")) {
+    const asciiCode = char.charCodeAt(0)
+    currentValue += asciiCode
+    currentValue *= 17
+    currentValue %= 256
   }
 
-  return 0
+  return currentValue
 }
 
 const parseLine = (state: State) => (line: string) => {
@@ -31,7 +36,6 @@ const findSolution = (state: State) => () => {
     0,
   )
 
-  console.log(JSON.stringify({ state }, null, 2))
   console.log({ sumOfAllHashes })
 }
 
