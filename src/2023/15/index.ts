@@ -26,13 +26,12 @@ type Boxes = Record<number, Lens[] | undefined>
 interface State {
   sequence: Step[]
   boxes: Boxes
-  lenses: Set<string>
 }
 
 const getBoxes = (n: number): Boxes => {
   const boxes: Boxes = {}
 
-  for (let i = 0; i < n - 1; i++) {
+  for (let i = 0; i < n; i++) {
     boxes[i] = []
   }
 
@@ -132,27 +131,28 @@ const solution = (state: State): State => {
 }
 
 const getSumOfFocusingPower = ({ boxes }: State): number => {
-  const lenses: Record<string, number> = {}
+  const lensesFocusingPower: number[] = []
 
   for (const [boxNumber, boxContents] of Object.entries(boxes)) {
-    if (!boxContents) {
+    if (!boxContents?.length) {
       continue
     }
 
     for (let i = 0; i < boxContents.length; i++) {
-      const { label, focalLength } = boxContents[i]
+      const { focalLength } = boxContents[i]
 
-      lenses[label] = (1 + parseInt(boxNumber, 10)) * (i + 1) * focalLength
+      lensesFocusingPower.push(
+        (1 + parseInt(boxNumber, 10)) * (i + 1) * focalLength,
+      )
     }
   }
 
-  return Object.values(lenses).reduce((acc, value) => acc + value, 0)
+  return lensesFocusingPower.reduce((acc, value) => acc + value, 0)
 }
 
 const parseLine = (state: State) => (line: string) => {
   state.sequence = line.split(",").map((text) => {
     const { label, operation, focalLength } = getInfoFromStep(text)
-    state.lenses.add(label)
 
     return {
       text,
@@ -180,7 +180,6 @@ const main = async () => {
   const state: State = {
     sequence: [],
     boxes: getBoxes(256),
-    lenses: new Set(),
   }
   const { inputFile } = await parseArgs()
 
