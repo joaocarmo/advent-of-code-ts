@@ -1,13 +1,45 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 
-interface Step {
+enum Operation {
+  "-" = "-",
+  "=" = "=",
+}
+
+interface StepInfo {
+  label: string
+  operation: Operation
+  focalLength: number
+}
+
+interface Step extends StepInfo {
   text: string
-  hash: number
+  textHash: number
+  labelHash: number
 }
 
 interface State {
   sequence: Step[]
+}
+
+const getInfoFromStep = (text: string): StepInfo => {
+  let label = ""
+  let operation = Operation["-"]
+  let focalLength = 0
+  let focalLengthText = ""
+
+  if (text.includes(Operation["="])) {
+    operation = Operation["="]
+  }
+
+  ;[label, focalLengthText] = text.split(operation)
+  focalLength = parseInt(focalLengthText, 10) || focalLength
+
+  return {
+    label,
+    operation,
+    focalLength,
+  }
 }
 
 const asciiHash = (text: string): number => {
@@ -23,16 +55,29 @@ const asciiHash = (text: string): number => {
   return currentValue
 }
 
+const solution = (state: State): State => {
+  return state
+}
+
 const parseLine = (state: State) => (line: string) => {
-  state.sequence = line.split(",").map((text) => ({
-    text,
-    hash: asciiHash(text),
-  }))
+  state.sequence = line.split(",").map((text) => {
+    const { label, operation, focalLength } = getInfoFromStep(text)
+
+    return {
+      text,
+      textHash: asciiHash(text),
+      label,
+      labelHash: asciiHash(label),
+      operation,
+      focalLength,
+    }
+  })
 }
 
 const findSolution = (state: State) => () => {
-  const sumOfAllHashes = state.sequence.reduce(
-    (acc, step) => acc + step.hash,
+  const result = solution(state)
+  const sumOfAllHashes = result.sequence.reduce(
+    (acc, step) => acc + step.textHash,
     0,
   )
 
