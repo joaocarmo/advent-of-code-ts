@@ -49,6 +49,14 @@ export class Grid {
     this.grid = []
   }
 
+  public get height(): number {
+    return this.grid.length
+  }
+
+  public get width(): number {
+    return this.grid[0]?.length ?? 0
+  }
+
   public addRow = (row: Tile[]) => {
     this.grid.push(row)
   }
@@ -157,6 +165,14 @@ export class Grid {
 
   public getNumOfEnergisedTiles = (): number => {
     return this.getEnergisedTiles().length
+  }
+
+  public resetBeams = () => {
+    this.grid.forEach((row) =>
+      row.forEach((tile) => {
+        tile.beams = []
+      }),
+    )
   }
 
   public toString(): string {

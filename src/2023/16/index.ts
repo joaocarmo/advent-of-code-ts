@@ -1,7 +1,7 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
 import { Grid, TileType } from "./Grid"
-import { solution } from "./solutionV1"
+import { solution } from "./solutionV2"
 
 export interface State {
   grid: Grid
@@ -33,9 +33,7 @@ const parseLine = (state: State) => (line: string) => {
 }
 
 const findSolution = (state: State) => () => {
-  solution(state)
-
-  const numOfEnergisedTiles = state.grid.getNumOfEnergisedTiles()
+  const numOfEnergisedTiles = solution(state)
 
   console.log(JSON.stringify({ numOfEnergisedTiles }, null, 2))
 }
