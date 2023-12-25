@@ -10,7 +10,7 @@ export const solution = (state: State): number => {
     [0, Direction.Down],
     [height - 1, Direction.Up],
   ]) {
-    for (let x = 0; x < width; x++) {
+    for (let x = 0; x < width - 1; x++) {
       const startingPoint = new Point(x, y)
       const [startingDirection] = state.grid.getNextDirection(
         startingPoint,
@@ -23,7 +23,7 @@ export const solution = (state: State): number => {
     }
   }
 
-  for (let y = 1; y < height - 1; y++) {
+  for (let y = 0; y < height - 1; y++) {
     for (const [x, direction] of [
       [0, Direction.Right],
       [width - 1, Direction.Left],
