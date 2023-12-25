@@ -184,7 +184,15 @@ export class Grid {
   public toEnergisedString(): string {
     return this.grid
       .map((row) =>
-        row.map(({ beams }) => (beams.length > 0 ? "#" : ".")).join(""),
+        row
+          .map(({ beams }) =>
+            beams.length > 0
+              ? beams.length === 1
+                ? "#"
+                : `${beams.length}`
+              : ".",
+          )
+          .join(""),
       )
       .join("\n")
   }
