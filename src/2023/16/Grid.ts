@@ -61,6 +61,10 @@ export class Grid {
     tile.beams.push(beam)
   }
 
+  public beamExists = (tile: Tile, direction: Direction): boolean => {
+    return tile.beams.some((beam) => beam.direction === direction)
+  }
+
   public getNextDirection = (
     currentPoint: Point,
     currentDirection: Direction,
@@ -101,9 +105,9 @@ export class Grid {
       case TileType.VerticalSplitter:
         switch (currentDirection) {
           case Direction.Up:
-            return [Direction.Up]
+            return [currentDirection]
           case Direction.Down:
-            return [Direction.Down]
+            return [currentDirection]
           case Direction.Left:
             return [Direction.Up, Direction.Down]
           case Direction.Right:
@@ -117,9 +121,9 @@ export class Grid {
           case Direction.Down:
             return [Direction.Left, Direction.Right]
           case Direction.Left:
-            return [Direction.Left]
+            return [currentDirection]
           case Direction.Right:
-            return [Direction.Right]
+            return [currentDirection]
         }
     }
   }
@@ -127,7 +131,11 @@ export class Grid {
   public moveBeam = (point: Point, direction: Direction) => {
     const tile = this.getTile(point)
 
-    if (!tile || tile.beams.length > 1) {
+    if (!tile) {
+      return
+    }
+
+    if (this.beamExists(tile, direction)) {
       return
     }
 
