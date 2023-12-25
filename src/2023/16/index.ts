@@ -1,18 +1,10 @@
 import { parseArgs } from "@/utils/parseArgs"
 import { ignoreBlankLine, readFileLine } from "@/utils/readFile"
-import { Direction, Grid, Point, TileType } from "./Grid"
+import { Grid, TileType } from "./Grid"
+import { solution } from "./solutionV1"
 
-interface State {
+export interface State {
   grid: Grid
-}
-
-const solution = (state: State) => {
-  const startingPoint = new Point(0, 0)
-  const [startingDirection] = state.grid.getNextDirection(
-    startingPoint,
-    Direction.Right,
-  )
-  state.grid.moveBeam(startingPoint, startingDirection)
 }
 
 const parseLine = (state: State) => (line: string) => {
